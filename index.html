@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo</title>
+    <!-- Enlace al archivo CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="mapCanvas"></canvas>
+
+    <div class="controls">
+        <button onclick="setColor('blue')">Azul</button>
+        <button onclick="setColor('red')">Rojo</button>
+        <button onclick="setColor('orange')">Naranja</button>
+        <button onclick="exportToPNG()">Exportar a PNG</button>
+
+        <!-- Leyenda -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: blue;"></div>
+                <span>Pago Completo</span>
+            </div>
+
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: red;"></div>
+                <span>No Pago</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: orange;"></div>
+                <span>Pago Parcial</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enlace al archivo JS -->
+    <script src="script.js"></script>
+</body>
+</html>
