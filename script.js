@@ -13,10 +13,14 @@ mapImage.onload = function() {
 
     // Dibuja la imagen en el canvas
     ctx.drawImage(mapImage, 0, 0);
+
+    // Cargar puntos desde localStorage
+    loadPoints();
 };
 
-// Variables para el color del punto
+// Variables para el color del punto y la lista de puntos
 let pointColor = 'blue'; // Color inicial
+let points = [];
 
 // Detecta clics en el canvas y dibuja puntos
 canvas.addEventListener('click', function(event) {
@@ -25,28 +29,28 @@ canvas.addEventListener('click', function(event) {
     const y = event.clientY - rect.top;
 
     // Dibuja un círculo en la posición del clic
+    drawPoint(x, y, pointColor);
+
+    // Guarda el punto en la lista
+    points.push({ x, y, color: pointColor });
+});
+
+// Función para dibujar un punto en el canvas
+function drawPoint(x, y, color) {
     ctx.beginPath();
     ctx.arc(x, y, 10, 0, 2 * Math.PI);
-    ctx.fillStyle = pointColor;
+    ctx.fillStyle = color;
     ctx.fill();
-});
+}
 
 // Cambia el color del punto
 function setColor(color) {
     pointColor = color;
 }
 
+// Función para exportar el mapa a PNG
 function exportToPNG() {
-    const canvas = document.getElementById('mapCanvas');
     const controls = document.querySelector('.controls');
-
-    console.log("Exportar a PNG llamado");
-
-    if (!canvas || !controls) {
-        console.log('Error: Canvas o controles no encontrados');
-        return;
-    }
-
     controls.style.display = 'none';
 
     setTimeout(() => {
@@ -55,10 +59,29 @@ function exportToPNG() {
         link.href = canvas.toDataURL('image/png');
         link.click();
 
-        console.log("Imagen exportada");
-
         controls.style.display = 'flex';
     }, 100);
+}
 
+// Función para guardar los puntos en localStorage
+function savePoints() {
+    localStorage.setItem('points', JSON.stringify(points));
+    alert('Puntos guardados!');
+}
 
+// Función para cargar los puntos desde localStorage
+function loadPoints() {
+    const storedPoints = localStorage.getItem('points');
+    if (storedPoints) {
+        points = JSON.parse(storedPoints);
+        points.forEach(point => drawPoint(point.x, point.y, point.color));
+    }
+}
+
+// Función para borrar todos los puntos
+function clearPoints() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(mapImage, 0, 0);
+    points = [];
+    localStorage.removeItem('points');
 }
